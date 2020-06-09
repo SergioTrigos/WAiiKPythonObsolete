@@ -16,59 +16,57 @@ class Core:
                     [0, 0, 0, 1]]
         self.angles = [0, 0, 0]  # This stores the angles by which an object has been rotated
 
-        self.shell = point()  # a point...class? I guess it is an image of a point so yeah
+        self.shell = "point"  # The default shell is a point
         self.scale = 1
 
-    self.runes = []  # listof mods
-    self.conns = []  # list of connections
+        self.runes = []  # listof mods
+        self.conns = []  # list of connections
 
-    self.vis = True  # this defines weather an object is hiden/shown (mostly used for vessels)
+        self.vis = True  # this defines weather an object is hiden/shown (mostly used for vessels)
 
-    # The following Values and Methods are Rune Independent
-    # I don't think the info bellow needs to be stored in the database... I'm not sure we need the menu's state to be stored/defined here... but if we do then here they are:
-    self.menu = False  # False = closed, True = Opened
-    self.act_menu = False  # False = closed, True = Opened
-    self.rune_list = False  # False = closed, True = Opened
+        # The following Values and Methods are Rune Independent
+        # I don't think the info bellow needs to be stored in the database... I'm not sure we need the menu's state to be stored/defined here... but if we do then here they are:
+        self.menu = False  # False = closed, True = Opened
+        self.act_menu = False  # False = closed, True = Opened
+        self.rune_list = False  # False = closed, True = Opened
 
-    self.selc = False  # if selected : True
-
-
-# RUNE INDEPENDENT METHODS
-# object menu
-def open_menu(self):
-    self.menu = True
+        self.selc = False  # if selected : True
 
 
-def close_menu(self):
-    self.menu = False
+    # RUNE INDEPENDENT METHODS
+    # object menu
+    def open_menu(self):
+        self.menu = True
 
-    # Action sub-menu, this one has "delete object", "copy object", and "connection list" features in it
+
+    def close_menu(self):
+        self.menu = False
+
+        # Action sub-menu, this one has "delete object", "copy object", and "connection list" features in it
     def open_act(self):
         self.act_menu = True
 
 
-def close_act(self):
-    self.act_menu = False
+    def close_act(self):
+        self.act_menu = False
 
 
-# Token List, this includes the "add tokens" button, and the tokens that have already been applied to the object
-def open_runelist(self):
-    self.rune_list = True
+    # Token List, this includes the "add tokens" button, and the tokens that have already been applied to the object
+    def open_runelist(self):
+        self.rune_list = True
 
 
-def close_runelist(self):
-    self.rune_list = False
+    def close_runelist(self):
+        self.rune_list = False
 
     # FUNCTIONALITY MASTER METHODS   -
     # CORE Functionalities
 
-    def draw_core(self,
-                  parent_stage):  # this is the emptu core's draw function, but it can be used by runes that do not change the draw funcitonality
+    def draw_core(self, parent_stage):  # this is the emptu core's draw function, but it can be used by runes that do not change the draw funcitonality
         self.loc  # object's location wrt parent stage
-        (???)  # find location of object wrt global stage  (I have the math for this)!!!
+        #  (???)  # find location of object wrt global stage  (I have the math for this)!!!
 
-    def move_core(self, parent_stage, dx, dy,
-                  dz):  # this is the empty core's move function, but it can be used by runes that do not change the move funcitonality
+    def move_core(self, parent_stage, dx, dy, dz):  # this is the empty core's move function, but it can be used by runes that do not change the move funcitonality
         # here I am checking if the object is already at a locational limit before moving it
         if dx > 0
             if self.loc[0] < parent_stage.limR[0]  # limR, limL, limT LimB are the limits in the Parent Stage's map
@@ -106,7 +104,7 @@ def close_runelist(self):
 
     # RUNE DEPENDENT Functionalities
 
-    # this vvv is the main funcitonality dictionary that maps runes to their specific functionality functions
+      # this vvv is the main functionality dictionary that maps runes to their specific functionality functions
     rune_funct = {'shell': {'draw': draw_shell, 'move': move_shell, },
                   'connection': {'draw': draw_connection, 'move': move_connection, },
                   'container': {'draw': draw_container, 'move': move_container, },
@@ -116,11 +114,42 @@ def close_runelist(self):
     def draw(self, cls, parent_stage):
         # get list of object's Tokens
         runess = self.runes
-        if runes =[]  # if there are no tokens
-        self.draw_core(parent_stage)
+        if runess == [] : # if there are no tokens
+            self.draw_core(parent_stage)
+        else:
+            for i in runess:
+                rune_dict = cls.rune_funct.get(i)
+                draw_f = rune_dict.get('draw')  # get the token specific draw function
+                draw_f()  # run it
 
-    else:
-    for i in runes
-        rune_dict = cls.rune_funct.get(i)
-        draw_f = rune_dict.get('draw')  # get the token specific draw function
-        draw_f()  # run it
+
+
+
+def new_core(Pstage, x, y, Userid, UserON):    # Here the object's id is created and assigned as the name of the oject instance
+    core_id = Userid+Pstage.id_+UserON
+    core_id = Core(x,y)
+    core_id.draw(Pstage)       # display id_ on stage
+    core_id = Pstage.pubpri    # is the stage public or private
+
+
+def del_core():
+    # ???
+
+def duplicate():
+    # ???
+
+
+# SELECTION DYNAMICS
+    # I'm not sure if this needs token specific
+
+selected = []  # a list of selected objects
+
+def selectObjs(O1id, *):  # more than one object can be selected
+    selected = [O1id]
+    for i in selected:
+        i.selec = True
+
+def deSelect():
+    for i in selected:
+        i.selec = False
+        selectd = []  # clear the global variable
